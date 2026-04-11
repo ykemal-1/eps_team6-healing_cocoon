@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Healing Cocoon | Login</title>
+        <link rel="stylesheet" href="../css/style.css" />
+    </head>
+    <body>
+        <div class="page-shell">
+            <main class="layout" aria-labelledby="app-title">
+                <!-- Calm hero area to communicate the brand message -->
+                <section class="hero" aria-label="Healing Cocoon introduction">
+                    <div class="hero-content">
+                        <p class="eyebrow">Welcome to Healing Cocoon</p>
+                        <h1 class="hero-title">
+                            Turn anxious moments into a sense of wonder
+                        </h1>
+                        <p class="hero-text">
+                            Support children with a calming multisensory
+                            environment before appointments, so clinics and care
+                            teams can focus on comfort, trust, and better care
+                            experiences.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Login card is kept as the main visual focus -->
+                <section class="card-wrap" aria-label="Login form area">
+                    <article class="login-card">
+                        <header class="card-header">
+                            <div
+                                class="logo-placeholder"
+                                role="img"
+                                aria-label="Healing Cocoon logo"
+                            >
+                                <img
+                                    src="../media/healing_cocoon-logo_transparent.png"
+                                    alt="Healing Cocoon logo"
+                                    class="logo-image"
+                                />
+                            </div>
+                            <h2 id="app-title">Healing Cocoon</h2>
+                            <p class="subtitle">
+                                A calming multisensory experience for children
+                            </p>
+                        </header>
+
+                        <form id="loginForm" novalidate>
+                            <div class="field-group">
+                                <label for="practiceName">Practice name</label>
+                                <div class="input-wrap">
+                                    <span class="input-icon" aria-hidden="true">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            focusable="false"
+                                        >
+                                            <path
+                                                d="M4 20h16v-2H4v2zm2-4h3v-5h6v5h3V8l-6-4-6 4v8z"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <input
+                                        id="practiceName"
+                                        name="practiceName"
+                                        type="text"
+                                        autocomplete="organization"
+                                        placeholder="Sunrise Dental"
+                                        required
+                                    />
+                                </div>
+                                <p
+                                    class="error-message"
+                                    id="practiceNameError"
+                                    aria-live="polite"
+                                ></p>
+                            </div>
+
+                            <div class="field-group">
+                                <label for="emailOrUsername"
+                                    >Email or username</label
+                                >
+                                <div class="input-wrap">
+                                    <span class="input-icon" aria-hidden="true">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            focusable="false"
+                                        >
+                                            <path
+                                                d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <input
+                                        id="emailOrUsername"
+                                        name="emailOrUsername"
+                                        type="text"
+                                        autocomplete="username"
+                                        placeholder="name@clinic.com"
+                                        required
+                                    />
+                                </div>
+                                <p
+                                    class="error-message"
+                                    id="emailOrUsernameError"
+                                    aria-live="polite"
+                                ></p>
+                            </div>
+
+                            <div class="field-group">
+                                <label for="password">Password</label>
+                                <div class="input-wrap">
+                                    <span class="input-icon" aria-hidden="true">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            focusable="false"
+                                        >
+                                            <path
+                                                d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 1 1 6 0v3H9z"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="current-password"
+                                        placeholder="Enter your password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        id="passwordToggle"
+                                        aria-label="Show password"
+                                        aria-pressed="false"
+                                    >
+                                        Show
+                                    </button>
+                                </div>
+                                <p
+                                    class="error-message"
+                                    id="passwordError"
+                                    aria-live="polite"
+                                ></p>
+                            </div>
+
+                            <div class="form-row">
+                                <label class="checkbox-wrap" for="rememberMe">
+                                    <input
+                                        id="rememberMe"
+                                        name="rememberMe"
+                                        type="checkbox"
+                                    />
+                                    <span>Remember me</span>
+                                </label>
+                                <a
+                                    class="forgot-link"
+                                    href="#"
+                                    aria-label="Reset password"
+                                    >Forgot password?</a
+                                >
+                            </div>
+
+                            <button type="submit" class="primary-btn">
+                                Sign In
+                            </button>
+                            <p class="form-note">
+                                For clinics, hospitals, and therapy practices
+                            </p>
+                            <p class="demo-credentials">
+                                Demo login: Team6 / Spring2026T6
+                            </p>
+
+                            <p
+                                class="status-message"
+                                id="statusMessage"
+                                aria-live="polite"
+                            ></p>
+                        </form>
+                    </article>
+                </section>
+            </main>
+
+            <footer class="site-footer">
+                <p>Healing Cocoon © 2026</p>
+            </footer>
+        </div>
+
+        <script src="../js/script.js"></script>
+    </body>
+</html>

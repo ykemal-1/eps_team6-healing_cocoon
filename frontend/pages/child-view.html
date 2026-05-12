@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Healing Cocoon | Child View</title>
+        <link rel="stylesheet" href="../css/style.css" />
+        <style>
+            /* Child-friendly overrides for Child View - improved layout */
+            :root {
+                --card-bg: #ffffffcc;
+                --muted: #5d7282;
+                --accent: #2f8fff;
+            }
+            .child-view-page {
+                background: linear-gradient(180deg, #fff7ef 0%, #f0fbff 100%);
+            }
+            .child-layout {
+                max-width: 1100px;
+                margin: 22px auto;
+                padding: 12px 18px;
+            }
+            .child-topbar {
+                background: transparent;
+                border: none;
+                padding: 12px 6px;
+            }
+            .child-hero {
+                text-align: left;
+                padding: 20px 18px;
+                background: linear-gradient(90deg, #ffd7a8, #fff2d6);
+                border-radius: 14px;
+                display: flex;
+                gap: 18px;
+                align-items: center;
+            }
+            .child-hero h2 {
+                font-size: 1.4rem;
+                margin: 0;
+                color: #173042;
+            }
+            .child-greeting {
+                font-size: 1.2rem;
+                margin: 0;
+                font-weight: 700;
+            }
+            .child-subtitle {
+                color: var(--muted);
+                margin-top: 6px;
+            }
+
+            /* Worlds grid */
+            .child-worlds {
+                margin-top: 14px;
+            }
+            .child-world-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+                gap: 18px;
+                align-items: stretch;
+            }
+            .child-world-card {
+                display: flex;
+                gap: 14px;
+                align-items: center;
+                padding: 16px;
+                border-radius: 14px;
+                background: var(--card-bg);
+                box-shadow: 0 10px 24px rgba(17, 39, 59, 0.06);
+                border: 1px solid rgba(15, 32, 52, 0.03);
+                font-size: 1rem;
+                min-height: 86px;
+            }
+            .child-world-card .child-world-visual {
+                flex: 0 0 68px;
+                height: 68px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, #fff, #f6f9ff);
+                font-size: 34px;
+            }
+            .child-world-card strong {
+                display: block;
+                font-size: 1.05rem;
+            }
+            .child-world-card span {
+                display: block;
+                color: var(--muted);
+            }
+            .child-world-card.selected {
+                transform: translateY(-6px);
+                box-shadow: 0 18px 36px rgba(47, 143, 255, 0.08);
+                border-color: var(--accent);
+            }
+
+            /* Hidden extra worlds by default */
+            .child-world-card.extra-world {
+                display: none;
+            }
+            .child-world-grid.expanded .child-world-card.extra-world {
+                display: flex;
+            }
+
+            .see-more-row {
+                display: flex;
+                justify-content: center;
+                margin-top: 8px;
+            }
+            .see-more-btn {
+                background: transparent;
+                border: none;
+                color: var(--accent);
+                font-weight: 700;
+                cursor: pointer;
+                padding: 8px 12px;
+            }
+
+            .big-toggle-row {
+                display: flex;
+                gap: 10px;
+                margin-top: 12px;
+            }
+            .level-pill {
+                padding: 10px 14px;
+                border-radius: 999px;
+                background: #fff;
+                border: 1px solid #f0f3f6;
+                font-weight: 700;
+            }
+            .level-pill.active {
+                background: linear-gradient(90deg, #ffd7a8, #ffb3a2);
+                border-color: transparent;
+            }
+
+            .breathing-card {
+                display: flex;
+                gap: 18px;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px;
+                border-radius: 12px;
+                background: linear-gradient(90deg, #e9f7ff, #f7fff0);
+            }
+            /* Breathing line: horizontal track with an indicator that oscillates up/down in a continuous loop */
+            .breathing-line {
+                position: relative;
+                width: 260px;
+                height: 6px;
+                border-radius: 8px;
+                background: linear-gradient(90deg, #f7fbff, #eef9ff);
+                display: block;
+                margin-left: 12px;
+            }
+            .breathing-indicator {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 16px;
+                height: 36px;
+                margin-left: -8px;
+                margin-top: -18px;
+                border-radius: 9px;
+                background: linear-gradient(90deg, #6ee7b7, #60a5fa);
+                transform: translate(-50%, 20px);
+            }
+            @keyframes breathLoop {
+                0% {
+                    transform: translate(-50%, 20px);
+                }
+                50% {
+                    transform: translate(-50%, -34px);
+                }
+                100% {
+                    transform: translate(-50%, 20px);
+                }
+            }
+            .breathing-line.playing .breathing-indicator {
+                animation: breathLoop 8s ease-in-out infinite;
+            }
+            /* Color shifts per phase */
+            .breathing-line.playing.inhale .breathing-indicator {
+                background: linear-gradient(90deg, #9ee7c7, #60a5fa);
+                box-shadow: 0 6px 18px rgba(96, 165, 250, 0.12);
+            }
+            .breathing-line.playing.exhale .breathing-indicator {
+                background: linear-gradient(90deg, #ffd7a8, #ffb3a2);
+                box-shadow: 0 6px 18px rgba(255, 179, 162, 0.12);
+            }
+
+            .child-start-btn {
+                font-size: 1.15rem;
+                padding: 12px 18px;
+                border-radius: 12px;
+                background: linear-gradient(90deg, #6ee7b7, #60a5fa);
+                color: #073042;
+                font-weight: 800;
+            }
+            .child-action {
+                text-align: center;
+                margin-top: 12px;
+            }
+
+            /* Touch and focus */
+            .child-world-card,
+            .level-pill,
+            .child-start-btn,
+            .see-more-btn {
+                cursor: pointer;
+            }
+            .child-world-card:focus,
+            .level-pill:focus,
+            .child-start-btn:focus,
+            .see-more-btn:focus {
+                box-shadow: 0 0 0 6px rgba(47, 143, 255, 0.08);
+                outline: none;
+            }
+        </style>
+    </head>
+    <body class="child-view-page">
+        <header class="child-topbar">
+            <a
+                class="topbar-back"
+                href="dashboard.html"
+                aria-label="Back to staff dashboard"
+            >
+                <span aria-hidden="true">←</span>
+                <span>Back</span>
+            </a>
+
+            <div class="topbar-brand">
+                <img
+                    src="../media/healing_cocoon-logo_transparent.png"
+                    alt="Healing Cocoon logo"
+                    class="topbar-logo"
+                />
+                <div>
+                    <h1>Healing Cocoon</h1>
+                    <p>Child View</p>
+                </div>
+            </div>
+
+            <div class="topbar-space" aria-hidden="true"></div>
+        </header>
+
+        <main class="child-layout">
+            <section class="child-hero card-panel">
+                <p class="child-greeting" id="childGreeting">Hi there 👋</p>
+                <h2>Choose a world where you want to relax</h2>
+                <p class="child-subtitle">
+                    Soft sounds, gentle lights, and cozy moments.
+                </p>
+            </section>
+
+            <section class="child-worlds card-panel">
+                <div class="section-heading compact">
+                    <div>
+                        <p class="section-kicker">Pick a world</p>
+                        <h3>Choose one calming place</h3>
+                    </div>
+                </div>
+
+                <div
+                    class="child-world-grid"
+                    role="radiogroup"
+                    aria-label="Choose a calming world"
+                >
+                    <button
+                        type="button"
+                        class="child-world-card ocean"
+                        data-environment="Ocean"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🌊</span>
+                        </div>
+                        <div>
+                            <strong>Ocean</strong>
+                            <span>Swim and relax</span>
+                        </div>
+                    </button>
+                    <button
+                        type="button"
+                        class="child-world-card forest"
+                        data-environment="Forest"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🌳</span>
+                        </div>
+                        <div>
+                            <strong>Forest</strong>
+                            <span>Breathe with nature</span>
+                        </div>
+                    </button>
+                    <button
+                        type="button"
+                        class="child-world-card space"
+                        data-environment="Space"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🚀</span>
+                        </div>
+                        <div>
+                            <strong>Space</strong>
+                            <span>Float among the stars</span>
+                        </div>
+                    </button>
+                    <button
+                        type="button"
+                        class="child-world-card garden"
+                        data-environment="Calm Garden"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🌸</span>
+                        </div>
+                        <div>
+                            <strong>Calm Garden</strong>
+                            <span>A peaceful place</span>
+                        </div>
+                    </button>
+
+                    <!-- Extra playful / cartoon worlds -->
+                    <button
+                        type="button"
+                        class="child-world-card candy extra-world"
+                        data-environment="Candy Cloud"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🍭</span>
+                        </div>
+                        <div>
+                            <strong>Candy Cloud</strong>
+                            <span>Sweet and cozy</span>
+                        </div>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="child-world-card toyroom extra-world"
+                        data-environment="Toy Room"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🧸</span>
+                        </div>
+                        <div>
+                            <strong>Toy Room</strong>
+                            <span>Play gently</span>
+                        </div>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="child-world-card rainbow extra-world"
+                        data-environment="Rainbow Meadow"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🌈</span>
+                        </div>
+                        <div>
+                            <strong>Rainbow Meadow</strong>
+                            <span>Colors and calm</span>
+                        </div>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="child-world-card cloudcastle extra-world"
+                        data-environment="Cloud Castle"
+                        aria-pressed="false"
+                    >
+                        <div class="child-world-visual">
+                            <span class="emoji" aria-hidden="true">🏰</span>
+                        </div>
+                        <div>
+                            <strong>Cloud Castle</strong>
+                            <span>Float and relax</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="see-more-row">
+                    <button
+                        id="seeMoreWorlds"
+                        class="see-more-btn"
+                        aria-expanded="false"
+                    >
+                        See more...
+                    </button>
+                </div>
+            </section>
+
+            <section class="child-controls-grid">
+                <article class="card-panel child-control-card">
+                    <div class="section-heading compact">
+                        <div>
+                            <p class="section-kicker">Sound</p>
+                            <h3>How soft should the sound be?</h3>
+                        </div>
+                    </div>
+                    <div class="big-toggle-row">
+                        <button
+                            type="button"
+                            class="level-pill active"
+                            data-level="Soft"
+                            data-control="sound"
+                        >
+                            Soft
+                        </button>
+                        <button
+                            type="button"
+                            class="level-pill"
+                            data-level="Medium"
+                            data-control="sound"
+                        >
+                            Medium
+                        </button>
+                        <button
+                            type="button"
+                            class="level-pill"
+                            data-level="Strong"
+                            data-control="sound"
+                        >
+                            Strong
+                        </button>
+                    </div>
+                </article>
+
+                <article class="card-panel child-control-card">
+                    <div class="section-heading compact">
+                        <div>
+                            <p class="section-kicker">Scent</p>
+                            <h3>How gentle should the scent be?</h3>
+                        </div>
+                    </div>
+                    <div class="big-toggle-row">
+                        <button
+                            type="button"
+                            class="level-pill active"
+                            data-level="Soft"
+                            data-control="scent"
+                        >
+                            Soft
+                        </button>
+                        <button
+                            type="button"
+                            class="level-pill"
+                            data-level="Medium"
+                            data-control="scent"
+                        >
+                            Medium
+                        </button>
+                        <button
+                            type="button"
+                            class="level-pill"
+                            data-level="Strong"
+                            data-control="scent"
+                        >
+                            Strong
+                        </button>
+                    </div>
+                </article>
+            </section>
+
+            <section class="breathing-card card-panel">
+                <div class="breathing-copy">
+                    <p class="section-kicker">Need help relaxing?</p>
+                    <h3 id="breathingTitle">
+                        Take a deep breath in... and out...
+                    </h3>
+                    <p id="breathingInstruction">
+                        Follow the gentle pulse and breathe slowly.
+                    </p>
+                    <div style="margin-top: 10px">
+                        <button
+                            id="startBreathingBtn"
+                            class="see-more-btn"
+                            aria-pressed="false"
+                        >
+                            Begin
+                        </button>
+                    </div>
+                </div>
+                <div class="breathing-line" aria-hidden="true">
+                    <div
+                        class="breathing-indicator"
+                        id="breathingIndicator"
+                    ></div>
+                </div>
+            </section>
+
+            <section class="child-action card-panel">
+                <button
+                    type="button"
+                    class="primary-btn child-start-btn"
+                    id="startCalmSession"
+                >
+                    Start My Calm Session
+                </button>
+                <p
+                    class="status-message"
+                    id="childMessage"
+                    aria-live="polite"
+                ></p>
+            </section>
+        </main>
+
+        <script src="../js/child-view.js"></script>
+    </body>
+</html>

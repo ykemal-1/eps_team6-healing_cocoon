@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Healing Cocoon | Active Session</title>
+        <link rel="stylesheet" href="../css/style.css" />
+    </head>
+    <body class="active-session-page">
+        <div class="dashboard-shell">
+            <aside class="sidebar" aria-label="Primary navigation">
+                <div class="sidebar-brand">
+                    <img
+                        class="sidebar-logo"
+                        src="../media/healing_cocoon-logo_transparent.png"
+                        alt="Healing Cocoon logo"
+                    />
+                    <div>
+                        <h1>Healing Cocoon</h1>
+                        <p>Clinic dashboard</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a class="nav-item" href="dashboard.html">
+                        <span class="nav-icon" aria-hidden="true">⌂</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a class="nav-item" href="new-session.html">
+                        <span class="nav-icon" aria-hidden="true">+</span>
+                        <span>New Session</span>
+                    </a>
+                    <a class="nav-item" href="child-view.html">
+                        <span class="nav-icon" aria-hidden="true">◌</span>
+                        <span>Child View</span>
+                    </a>
+                    <a class="nav-item" href="accessibility.html">
+                        <span class="nav-icon" aria-hidden="true">A</span>
+                        <span>Accessibility</span>
+                    </a>
+                    <a class="nav-item" href="settings.html">
+                        <span class="nav-icon" aria-hidden="true">⚙</span>
+                        <span>Settings</span>
+                    </a>
+                    <a class="nav-item nav-logout" href="sign-in.html?logout=1">
+                        <span class="nav-icon" aria-hidden="true">⇦</span>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <main class="active-main" id="activeMain">
+                <section class="active-hero card-panel">
+                    <div>
+                        <p class="greeting">Live monitoring</p>
+                        <h2>Active Session</h2>
+                        <p class="hero-copy">
+                            Monitor and manage the current calming session.
+                        </p>
+                    </div>
+                    <div class="dashboard-badge" id="activeStateBadge">
+                        Session running
+                    </div>
+                </section>
+
+                <section class="empty-state card-panel" id="emptyState" hidden>
+                    <h3>No active session found</h3>
+                    <p>
+                        Start a new session to view live controls and session
+                        monitoring.
+                    </p>
+                    <a
+                        class="primary-btn inline-primary"
+                        href="new-session.html"
+                        >Start New Session</a
+                    >
+                </section>
+
+                <div id="sessionContent">
+                    <section class="active-overview card-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="section-kicker">
+                                    Active session overview
+                                </p>
+                                <h3>Current child profile and settings</h3>
+                            </div>
+                        </div>
+
+                        <div class="overview-grid-active">
+                            <div class="info-card">
+                                <p class="card-label">Child Name</p>
+                                <h4 id="childNameValue">-</h4>
+                            </div>
+                            <div class="info-card">
+                                <p class="card-label">Age Range</p>
+                                <h4 id="ageRangeValue">-</h4>
+                            </div>
+                            <div class="info-card">
+                                <p class="card-label">Environment</p>
+                                <h4 id="environmentValue">-</h4>
+                            </div>
+                            <div class="info-card">
+                                <p class="card-label">Duration</p>
+                                <h4 id="durationValue">-</h4>
+                            </div>
+                            <div class="info-card">
+                                <p class="card-label">Sound Intensity</p>
+                                <h4 id="soundValue">-</h4>
+                            </div>
+                            <div class="info-card">
+                                <p class="card-label">Scent Intensity</p>
+                                <h4 id="scentValue">-</h4>
+                            </div>
+                        </div>
+
+                        <div class="notes-panel">
+                            <div>
+                                <p class="card-label">Accessibility settings</p>
+                                <p id="accessibilityValue">-</p>
+                            </div>
+                            <div>
+                                <p class="card-label">Notes</p>
+                                <p id="notesValue">No notes added.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="status-grid">
+                        <article class="status-card card-panel">
+                            <div class="section-heading compact">
+                                <div>
+                                    <p class="section-kicker">Session status</p>
+                                    <h3>Calming experience in progress</h3>
+                                </div>
+                            </div>
+
+                            <div
+                                class="environment-preview"
+                                id="environmentPreview"
+                            >
+                                <div class="preview-overlay">
+                                    <strong id="previewTitle"
+                                        >Environment</strong
+                                    >
+                                    <span id="previewLabel">Active</span>
+                                </div>
+                            </div>
+
+                            <div class="status-readout">
+                                <div>
+                                    <p class="card-label">Session Status</p>
+                                    <h4 id="sessionStatusText">Active</h4>
+                                </div>
+                                <div>
+                                    <p class="card-label">Countdown Timer</p>
+                                    <h4 id="countdownTimer">00:00</h4>
+                                </div>
+                                <div>
+                                    <p class="card-label">Cocoon Status</p>
+                                    <h4 id="cocoonStatusText">
+                                        Running normally
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <div class="control-row">
+                                <button
+                                    type="button"
+                                    class="secondary-btn"
+                                    id="pauseButton"
+                                >
+                                    Pause Session
+                                </button>
+                                <button
+                                    type="button"
+                                    class="primary-btn inline-primary"
+                                    id="endButton"
+                                >
+                                    End Session
+                                </button>
+                                <button
+                                    type="button"
+                                    class="danger-btn"
+                                    id="emergencyButton"
+                                >
+                                    Emergency Stop
+                                </button>
+                            </div>
+                        </article>
+
+                        <article class="summary-card card-panel">
+                            <div class="section-heading compact">
+                                <div>
+                                    <p class="section-kicker">
+                                        Session experience summary
+                                    </p>
+                                    <h3>Current sensory setup</h3>
+                                </div>
+                            </div>
+
+                            <div class="summary-grid">
+                                <div class="mini-summary">
+                                    <p class="card-label">Visual mode</p>
+                                    <h4 id="summaryVisual">-</h4>
+                                </div>
+                                <div class="mini-summary">
+                                    <p class="card-label">Sound level</p>
+                                    <h4 id="summarySound">-</h4>
+                                </div>
+                                <div class="mini-summary">
+                                    <p class="card-label">Scent level</p>
+                                    <h4 id="summaryScent">-</h4>
+                                </div>
+                                <div class="mini-summary">
+                                    <p class="card-label">Accessibility mode</p>
+                                    <h4 id="summaryAccessibility">-</h4>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+
+                    <p
+                        class="status-message"
+                        id="activeMessage"
+                        aria-live="polite"
+                    ></p>
+                </div>
+            </main>
+        </div>
+
+        <script src="../js/active-session.js"></script>
+    </body>
+</html>

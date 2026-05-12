@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Healing Cocoon | Staff Sign-Up</title>
+        <link rel="stylesheet" href="../css/style.css" />
+        <link
+            rel="icon"
+            type="image/png"
+            href="../media/healing_cocoon-logo_transparent.png"
+        />
+        <style>
+            .clerk-signup-page {
+                min-height: 100vh;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+            }
+
+            .signup-shell {
+                width: 100%;
+                max-width: 980px;
+                display: grid;
+                gap: 24px;
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .signup-brand,
+            .signup-card {
+                background: rgba(255, 255, 255, 0.95);
+                border: 1px solid rgba(214, 228, 239, 0.9);
+                border-radius: 18px;
+                box-shadow: 0 16px 36px rgba(17, 39, 59, 0.12);
+            }
+
+            .signup-brand {
+                padding: 28px;
+            }
+
+            .signup-brand h1 {
+                margin: 0 0 10px;
+                font-size: 1.8rem;
+            }
+
+            .signup-brand p {
+                margin: 0;
+                color: #5d7282;
+                line-height: 1.6;
+            }
+
+            .signup-card {
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .signup-note {
+                margin: 2px 0 0;
+                text-align: center;
+                color: #5d7282;
+                font-size: 0.9rem;
+            }
+
+            #clerkSignUp {
+                width: 100%;
+                min-height: 420px;
+            }
+
+            @media (min-width: 900px) {
+                .signup-shell {
+                    grid-template-columns: 1.05fr 0.95fr;
+                }
+            }
+        </style>
+    </head>
+    <body class="clerk-signup-page">
+        <main class="signup-shell" aria-label="Staff sign-up area">
+            <section class="signup-brand" aria-label="Healing Cocoon overview">
+                <img
+                    src="../media/healing_cocoon-logo_transparent.png"
+                    alt="Healing Cocoon logo"
+                    style="
+                        width: 72px;
+                        height: auto;
+                        display: block;
+                        margin-bottom: 14px;
+                    "
+                />
+                <h1>Create Staff Account</h1>
+                <p>
+                    Register a staff account to manage cocoon sessions,
+                    accessibility settings, and clinic preferences.
+                </p>
+            </section>
+
+            <section class="signup-card" aria-label="Clerk sign-up form">
+                <div id="clerkSignUp"></div>
+                <p class="signup-note" id="signupStatus" aria-live="polite"></p>
+            </section>
+        </main>
+
+        <script>
+            const BACKEND_URL = "http://127.0.0.1:8000";
+            const CLERK_JS_VERSION = "4.73.14";
+            let clerkPublishableKey = "";
+
+            function getPagesBaseUrl() {
+                const marker = "/frontend/pages/";
+                const href = window.location.href;
+                const markerIndex = href.indexOf(marker);
+
+                if (markerIndex >= 0) {
+                    return href.slice(0, markerIndex + marker.length);
+                }
+
+                return new URL("./", window.location.href).href;
+            }
+
+            // Explicit Clerk URLs to prevent redirecting to static server root.
+            const PAGES_BASE_URL = getPagesBaseUrl();
+            const signInUrl = new URL("sign-in.html", PAGES_BASE_URL).href;
+            const signUpUrl = new URL("sign-up.html", PAGES_BASE_URL).href;
+            const afterSignInUrl = new URL("dashboard.html", PAGES_BASE_URL)
+                .href;
+            const afterSignUpUrl = new URL("dashboard.html", PAGES_BASE_URL)
+                .href;
+
+            const DASHBOARD_URL = afterSignUpUrl;
+            const statusNode = document.getElementById("signupStatus");
+            const LOG_PREFIX = "[HealingCocoon Auth][sign-up]";
+            const CLERK_RETRY_PARAM = "clerkRetry";
+
+            function setStatus(message) {
+                statusNode.textContent = message;
+            }
+
+            function log(message, data) {
+                if (typeof data !== "undefined") {
+                    console.info(`${LOG_PREFIX} ${message}`, data);
+                } else {
+                    console.info(`${LOG_PREFIX} ${message}`);
+                }
+            }
+
+            function isValidPublishableKey(value) {
+                return (
+                    typeof value === "string" &&
+                    value.trim().length > 0 &&
+                    value.startsWith("pk_")
+                );
+            }
+
+            function hasRetriedClerkLoad() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get(CLERK_RETRY_PARAM) === "1";
+            }
+
+            function hasFactorTwoHash() {
+                return window.location.hash.includes("factor-two");
+            }
+
+            function reloadClerkPageForRetry() {
+                const url = new URL(window.location.href);
+                url.searchParams.set(CLERK_RETRY_PARAM, "1");
+                url.hash = "";
+                log("Retrying Clerk page load with cache-busted URL", {
+                    retryUrl: url.href,
+                });
+                window.location.replace(url.href);
+            }
+
+            async function fetchClerkPublishableKey() {
+                log("Fetching Clerk publishable key from backend");
+                const response = await fetch(
+                    `${BACKEND_URL}/api/public/clerk-config`,
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to load Clerk config: ${response.status}`,
+                    );
+                }
+
+                const data = await response.json();
+
+                if (!isValidPublishableKey(data.publishableKey)) {
+                    throw new Error(
+                        "Backend did not provide a valid Clerk publishable key",
+                    );
+                }
+
+                log("Received valid Clerk publishable key");
+
+                return data.publishableKey;
+            }
+
+            function decodeBase64Url(value) {
+                const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+                const padLength = (4 - (normalized.length % 4)) % 4;
+                return atob(normalized + "=".repeat(padLength));
+            }
+
+            function getFrontendApiFromPublishableKey(publishableKey) {
+                // Format example:
+                // pk_test_<base64(frontend-api + "$")>
+                const parts = publishableKey.split("_");
+                if (parts.length < 3) {
+                    throw new Error("Invalid Clerk publishable key format");
+                }
+
+                const encoded = parts.slice(2).join("_");
+                const decoded = decodeBase64Url(encoded);
+                return decoded.replace(/\$$/, "");
+            }
+
+            async function loadClerkScript() {
+                if (!isValidPublishableKey(clerkPublishableKey)) {
+                    throw new Error("Invalid or missing Clerk publishable key");
+                }
+
+                const frontendApi =
+                    getFrontendApiFromPublishableKey(clerkPublishableKey);
+                const scriptUrl = `https://${frontendApi}/npm/@clerk/clerk-js@${CLERK_JS_VERSION}/dist/clerk.browser.js`;
+                log("Loading Clerk browser script", { scriptUrl });
+
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement("script");
+                    script.src = scriptUrl;
+                    script.async = true;
+                    script.crossOrigin = "anonymous";
+                    script.setAttribute(
+                        "data-clerk-publishable-key",
+                        clerkPublishableKey,
+                    );
+                    script.onload = resolve;
+                    script.onerror = () => {
+                        reject(new Error("Failed to load ClerkJS bundle"));
+                    };
+                    document.head.appendChild(script);
+                });
+            }
+
+            async function saveTokenAndRedirect(clerkInstance) {
+                if (!clerkInstance || !clerkInstance.session) {
+                    log("No Clerk session found, skip redirect");
+                    return;
+                }
+
+                try {
+                    const token = await clerkInstance.session.getToken();
+
+                    if (token) {
+                        localStorage.setItem("healingCocoonAuthToken", token);
+                    }
+
+                    log("Session exists, redirecting to dashboard", {
+                        dashboardUrl: DASHBOARD_URL,
+                    });
+                    window.location.replace(DASHBOARD_URL);
+                } catch (error) {
+                    console.error("Could not store Clerk session token", error);
+                    setStatus("Signed up, but token could not be stored.");
+                }
+            }
+
+            window.addEventListener("load", async () => {
+                try {
+                    window.addEventListener("unhandledrejection", (event) => {
+                        const reasonText = String(
+                            event.reason?.message || event.reason || "",
+                        );
+                        if (
+                            reasonText.includes("ChunkLoadError") ||
+                            reasonText.includes("Loading chunk") ||
+                            reasonText.includes("vendors_") ||
+                            reasonText.includes("ui-common_")
+                        ) {
+                            console.warn(
+                                `${LOG_PREFIX} Clerk chunk load failed`,
+                                event.reason,
+                            );
+
+                            if (!hasRetriedClerkLoad()) {
+                                event.preventDefault();
+                                reloadClerkPageForRetry();
+                            } else {
+                                setStatus(
+                                    "Clerk UI chunk failed to load. Please hard refresh the page.",
+                                );
+                            }
+                        }
+                    });
+
+                    clerkPublishableKey = await fetchClerkPublishableKey();
+
+                    await loadClerkScript();
+                    log("Clerk script loaded");
+
+                    if (!window.Clerk) {
+                        setStatus(
+                            "Clerk failed to load. Check your network connection.",
+                        );
+                        return;
+                    }
+
+                    await window.Clerk.load({
+                        publishableKey: clerkPublishableKey,
+                        signInUrl,
+                        signUpUrl,
+                        afterSignInUrl,
+                        afterSignUpUrl,
+                        signInForceRedirectUrl: afterSignInUrl,
+                        signInFallbackRedirectUrl: afterSignInUrl,
+                        signUpForceRedirectUrl: afterSignUpUrl,
+                        signUpFallbackRedirectUrl: afterSignUpUrl,
+                    });
+                    log("Clerk loaded", {
+                        hasSession: Boolean(window.Clerk.session),
+                        currentHash: window.location.hash,
+                        clerkUser: window.Clerk.user,
+                        clerkOrganization: window.Clerk.organization,
+                    });
+
+                    if (hasFactorTwoHash() && !window.Clerk.session) {
+                        log("Clearing stale factor-two hash route");
+                        window.history.replaceState({}, "", signUpUrl);
+                    }
+
+                    if (window.Clerk.session) {
+                        log("Already signed in. Redirecting immediately.");
+                        await saveTokenAndRedirect(window.Clerk);
+                        return;
+                    }
+
+                    log("Mounting Clerk Sign-Up component", {
+                        signInUrl,
+                        signUpUrl,
+                        afterSignInUrl,
+                        afterSignUpUrl,
+                    });
+                    window.Clerk.mountSignUp(
+                        document.getElementById("clerkSignUp"),
+                        {
+                            routing: "hash",
+                            signInUrl,
+                            signUpUrl,
+                            afterSignInUrl,
+                            afterSignUpUrl,
+                            fallbackRedirectUrl: afterSignUpUrl,
+                            forceRedirectUrl: afterSignUpUrl,
+                            appearance: {
+                                variables: {
+                                    colorPrimary: "#2f8fff",
+                                    colorText: "#173042",
+                                    colorBackground: "#ffffff",
+                                    borderRadius: "12px",
+                                },
+                            },
+                        },
+                    );
+
+                    // Add detailed logging about component mount and Clerk internals
+                    log("Sign-Up component mounted, checking Clerk internals", {
+                        isSignedIn: window.Clerk?.user ? true : false,
+                        isLoaded: window.Clerk?.isLoaded,
+                        hasSession: Boolean(window.Clerk?.session),
+                        clerkReady: window.Clerk?.loaded === true,
+                        activationState: window.Clerk?.client?.activationState,
+                    });
+
+                    // Small delay to let component render, then check again
+                    await new Promise((resolve) => setTimeout(resolve, 500));
+                    log("After component render delay, Clerk state is", {
+                        isSignedIn: window.Clerk?.user ? true : false,
+                        isLoaded: window.Clerk?.isLoaded,
+                        hasSession: Boolean(window.Clerk?.session),
+                        clerkVersion: window.Clerk?.version,
+                    });
+
+                    let stateChangeCount = 0;
+                    window.Clerk.addListener(
+                        async ({ session, user, organization }) => {
+                            stateChangeCount++;
+                            log(
+                                `Clerk auth state changed [#${stateChangeCount}]`,
+                                {
+                                    hasSession: Boolean(session),
+                                    sessionState: session?.status,
+                                    userId: user?.id,
+                                    currentHash: window.location.hash,
+                                    sessionCreatedAt: session?.createdAt,
+                                },
+                            );
+
+                            if (session) {
+                                log(
+                                    `State change #${stateChangeCount}: Found session, calling saveTokenAndRedirect`,
+                                    {
+                                        sessionId: session.id,
+                                        sessionStatus: session.status,
+                                    },
+                                );
+                                try {
+                                    await saveTokenAndRedirect(window.Clerk);
+                                } catch (error) {
+                                    log(
+                                        `State change #${stateChangeCount}: saveTokenAndRedirect threw error`,
+                                        { error: String(error) },
+                                    );
+                                }
+                            } else {
+                                log(
+                                    `State change #${stateChangeCount}: No session yet, waiting for sign-up completion`,
+                                );
+                            }
+                        },
+                    );
+                } catch (error) {
+                    console.error("Error while initializing Clerk", error);
+                    setStatus(
+                        "Unable to initialize sign-up. Check backend Clerk config and key.",
+                    );
+                }
+            });
+        </script>
+    </body>
+</html>

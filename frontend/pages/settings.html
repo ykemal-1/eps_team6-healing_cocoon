@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Healing Cocoon | Settings</title>
+        <link rel="stylesheet" href="../css/style.css" />
+    </head>
+    <body class="settings-page">
+        <div class="dashboard-shell">
+            <aside class="sidebar" aria-label="Primary navigation">
+                <div class="sidebar-brand">
+                    <img
+                        class="sidebar-logo"
+                        src="../media/healing_cocoon-logo_transparent.png"
+                        alt="Healing Cocoon logo"
+                    />
+                    <div>
+                        <h1>Healing Cocoon</h1>
+                        <p>Clinic dashboard</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a class="nav-item" href="dashboard.html">
+                        <span class="nav-icon" aria-hidden="true">⌂</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a class="nav-item" href="new-session.html">
+                        <span class="nav-icon" aria-hidden="true">+</span>
+                        <span>New Session</span>
+                    </a>
+                    <a class="nav-item" href="child-view.html">
+                        <span class="nav-icon" aria-hidden="true">◌</span>
+                        <span>Child View</span>
+                    </a>
+                    <a class="nav-item" href="accessibility.html">
+                        <span class="nav-icon" aria-hidden="true">A</span>
+                        <span>Accessibility</span>
+                    </a>
+                    <a
+                        class="nav-item active"
+                        href="settings.html"
+                        aria-current="page"
+                    >
+                        <span class="nav-icon" aria-hidden="true">⚙</span>
+                        <span>Settings</span>
+                    </a>
+                    <a class="nav-item nav-logout" href="sign-in.html?logout=1">
+                        <span class="nav-icon" aria-hidden="true">⇦</span>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <main class="settings-main">
+                <section class="settings-hero card-panel">
+                    <div>
+                        <p class="greeting">Platform configuration</p>
+                        <h2>Settings</h2>
+                        <p class="hero-copy">
+                            Manage practice preferences and Healing Cocoon
+                            defaults.
+                        </p>
+                    </div>
+                    <div class="dashboard-badge">Practice setup</div>
+                </section>
+
+                <section class="settings-grid">
+                    <article class="settings-card card-panel">
+                        <div class="section-heading compact">
+                            <div>
+                                <p class="section-kicker">Practice settings</p>
+                                <h3>Clinic profile details</h3>
+                            </div>
+                        </div>
+
+                        <div class="form-grid two-up">
+                            <div class="field-group">
+                                <label for="practiceNameSetting"
+                                    >Practice name</label
+                                >
+                                <input
+                                    id="practiceNameSetting"
+                                    type="text"
+                                    data-setting="practiceName"
+                                    placeholder="Bright Smile Dental"
+                                />
+                            </div>
+                            <div class="field-group">
+                                <label for="contactEmailSetting"
+                                    >Contact email</label
+                                >
+                                <input
+                                    id="contactEmailSetting"
+                                    type="email"
+                                    data-setting="contactEmail"
+                                    placeholder="info@practice.com"
+                                />
+                            </div>
+                            <div class="field-group">
+                                <label for="contactPhoneSetting"
+                                    >Contact phone number</label
+                                >
+                                <input
+                                    id="contactPhoneSetting"
+                                    type="tel"
+                                    data-setting="contactPhone"
+                                    placeholder="+351 123 45 67 89"
+                                />
+                            </div>
+                            <div class="field-group">
+                                <label for="cocoonCountSetting"
+                                    >Number of cocoons available</label
+                                >
+                                <input
+                                    id="cocoonCountSetting"
+                                    type="number"
+                                    min="1"
+                                    data-setting="cocoonCount"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="locationSetting"
+                                >Location / address</label
+                            >
+                            <textarea
+                                id="locationSetting"
+                                rows="3"
+                                data-setting="location"
+                                placeholder="Main street 10, Porto"
+                            ></textarea>
+                        </div>
+                    </article>
+
+                    <article class="settings-card card-panel">
+                        <div class="section-heading compact">
+                            <div>
+                                <p class="section-kicker">Cocoon defaults</p>
+                                <h3>Default session setup</h3>
+                            </div>
+                        </div>
+
+                        <div class="form-grid two-up">
+                            <div class="field-group">
+                                <label for="defaultEnvironmentSetting"
+                                    >Default environment</label
+                                >
+                                <select
+                                    id="defaultEnvironmentSetting"
+                                    data-setting="defaultEnvironment"
+                                >
+                                    <option value="Ocean">Ocean</option>
+                                    <option value="Forest">Forest</option>
+                                    <option value="Space">Space</option>
+                                    <option value="Calm Garden">
+                                        Calm Garden
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label for="defaultDurationSetting"
+                                    >Default session duration</label
+                                >
+                                <select
+                                    id="defaultDurationSetting"
+                                    data-setting="defaultDuration"
+                                >
+                                    <option value="5 min">5 min</option>
+                                    <option value="10 min">10 min</option>
+                                    <option value="15 min">15 min</option>
+                                    <option value="20 min">20 min</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid two-up">
+                            <div class="field-group">
+                                <label for="defaultSoundLevelSetting"
+                                    >Default sound level</label
+                                >
+                                <select
+                                    id="defaultSoundLevelSetting"
+                                    data-setting="defaultSoundLevel"
+                                >
+                                    <option value="Soft">Soft</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Strong">Strong</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label for="defaultScentLevelSetting"
+                                    >Default scent level</label
+                                >
+                                <select
+                                    id="defaultScentLevelSetting"
+                                    data-setting="defaultScentLevel"
+                                >
+                                    <option value="Soft">Soft</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Strong">Strong</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label class="toggle-line">
+                            <span>Auto-start child view</span>
+                            <input
+                                type="checkbox"
+                                data-setting="autoStartChildView"
+                            />
+                            <span class="switch" aria-hidden="true"></span>
+                        </label>
+                    </article>
+
+                    <article class="settings-card card-panel">
+                        <div class="section-heading compact">
+                            <div>
+                                <p class="section-kicker">
+                                    Branding and appearance
+                                </p>
+                                <h3>Interface look and feel</h3>
+                            </div>
+                        </div>
+
+                        <div class="branding-grid">
+                            <div class="upload-placeholder">
+                                <strong>Practice logo</strong>
+                                <p>Upload placeholder only</p>
+                                <button
+                                    type="button"
+                                    class="secondary-btn"
+                                    disabled
+                                >
+                                    Choose file
+                                </button>
+                            </div>
+                            <div class="theme-preview">
+                                <strong>Theme preview</strong>
+                                <div class="theme-swatch"></div>
+                            </div>
+                        </div>
+
+                        <div class="toggle-stack">
+                            <label class="toggle-line">
+                                <span>Reduced motion in interface</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="reducedMotion"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                            <label class="toggle-line">
+                                <span>High contrast mode</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="highContrast"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                        </div>
+                    </article>
+
+                    <article class="settings-card card-panel">
+                        <div class="section-heading compact">
+                            <div>
+                                <p class="section-kicker">
+                                    Notification settings
+                                </p>
+                                <h3>Alerts and reminders</h3>
+                            </div>
+                        </div>
+
+                        <div class="toggle-stack">
+                            <label class="toggle-line">
+                                <span>Session end notifications</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="notifySessionEnd"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                            <label class="toggle-line">
+                                <span>Emergency stop alerts</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="notifyEmergencyStop"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                            <label class="toggle-line">
+                                <span>Daily usage summary</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="notifyDailySummary"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                            <label class="toggle-line">
+                                <span>Maintenance reminders</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="notifyMaintenance"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                        </div>
+                    </article>
+
+                    <article class="settings-card card-panel">
+                        <div class="section-heading compact">
+                            <div>
+                                <p class="section-kicker">Data and privacy</p>
+                                <h3>Control data behavior</h3>
+                            </div>
+                        </div>
+
+                        <div class="toggle-stack">
+                            <label class="toggle-line">
+                                <span>Store session history</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="storeSessionHistory"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                            <label class="toggle-line">
+                                <span>Anonymized child names</span>
+                                <input
+                                    type="checkbox"
+                                    data-setting="anonymizeChildNames"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                            <label class="toggle-line">
+                                <span
+                                    >Clear session data after each session</span
+                                >
+                                <input
+                                    type="checkbox"
+                                    data-setting="clearSessionAfterUse"
+                                />
+                                <span class="switch" aria-hidden="true"></span>
+                            </label>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="settings-actions card-panel">
+                    <button
+                        type="button"
+                        class="primary-btn inline-primary"
+                        id="saveSettingsBtn"
+                    >
+                        Save Settings
+                    </button>
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="resetSettingsBtn"
+                    >
+                        Reset to Default
+                    </button>
+                    <p
+                        class="status-message"
+                        id="settingsMessage"
+                        aria-live="polite"
+                    ></p>
+                </section>
+            </main>
+        </div>
+
+        <script src="../js/settings.js"></script>
+    </body>
+</html>

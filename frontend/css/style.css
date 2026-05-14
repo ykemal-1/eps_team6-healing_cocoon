@@ -970,6 +970,31 @@ body.accessibility-page {
     padding: 24px 28px;
 }
 
+.child-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 215, 168, 0.72),
+        rgba(255, 242, 214, 0.95)
+    );
+    position: relative;
+    overflow: hidden;
+}
+
+.child-hero::after {
+    content: "";
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+}
+
 .child-hero h2 {
     margin: 0;
     font-size: clamp(1.8rem, 3vw, 2.6rem);
@@ -1025,6 +1050,11 @@ body.accessibility-page {
     border-radius: 18px;
     margin-bottom: 12px;
     background: linear-gradient(135deg, #aee5cc, #b5dbff, #d9c4ff);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-size: 2.6rem;
+    line-height: 1;
 }
 
 .child-world-card strong {
@@ -1036,6 +1066,53 @@ body.accessibility-page {
 .child-world-card span {
     color: var(--text-muted);
     font-size: 0.92rem;
+}
+
+.child-world-card.extra-world {
+    display: none;
+}
+
+.child-world-grid.expanded .child-world-card.extra-world {
+    display: block;
+}
+
+.child-world-card.extra-world .child-world-visual {
+    margin-bottom: 12px;
+}
+
+.see-more-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.see-more-btn {
+    border: 1px solid rgba(214, 228, 239, 0.95);
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(248, 252, 255, 0.95);
+    color: #2a73b9;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 18px rgba(17, 39, 59, 0.05);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.see-more-btn:hover,
+.see-more-btn:focus-visible {
+    transform: translateY(-1px);
+    outline: none;
+    border-color: rgba(47, 143, 255, 0.28);
+    box-shadow: 0 14px 24px rgba(17, 39, 59, 0.08);
+}
+
+.child-world-card .emoji {
+    display: block;
+    transform: translateY(-1px);
 }
 
 .child-world-card.ocean .child-world-visual {
@@ -1102,6 +1179,11 @@ body.accessibility-page {
     align-items: center;
     justify-content: space-between;
     gap: 18px;
+    background: linear-gradient(
+        135deg,
+        rgba(233, 247, 255, 0.92),
+        rgba(247, 255, 240, 0.92)
+    );
 }
 
 .breathing-copy h3 {
@@ -1111,6 +1193,76 @@ body.accessibility-page {
 .breathing-copy p {
     margin: 0;
     color: var(--text-muted);
+}
+
+.breathing-line {
+    position: relative;
+    width: min(320px, 42vw);
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        rgba(214, 228, 239, 0.2),
+        rgba(181, 219, 255, 0.45),
+        rgba(214, 228, 239, 0.2)
+    );
+    flex-shrink: 0;
+}
+
+.breathing-indicator {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 38px;
+    margin-left: -9px;
+    margin-top: -19px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6ee7b7, #60a5fa);
+    transform: translate(-50%, 18px);
+    box-shadow: 0 8px 20px rgba(96, 165, 250, 0.12);
+}
+
+@keyframes breathLoop {
+    0% {
+        transform: translate(-50%, 18px);
+    }
+
+    50% {
+        transform: translate(-50%, -34px);
+    }
+
+    100% {
+        transform: translate(-50%, 18px);
+    }
+}
+
+.breathing-line.playing .breathing-indicator {
+    animation: breathLoop 8s ease-in-out infinite;
+}
+
+.breathing-line.playing.inhale .breathing-indicator {
+    background: linear-gradient(90deg, #9ee7c7, #60a5fa);
+    box-shadow: 0 8px 20px rgba(96, 165, 250, 0.14);
+}
+
+.breathing-line.playing.exhale .breathing-indicator {
+    background: linear-gradient(90deg, #ffd7a8, #ffb3a2);
+    box-shadow: 0 8px 20px rgba(255, 179, 162, 0.14);
+}
+
+.child-action {
+    text-align: center;
+}
+
+.child-start-btn {
+    width: min(420px, 100%);
+    margin: 0 auto;
+    display: inline-block;
+}
+
+.child-action .status-message {
+    text-align: center;
 }
 
 .breathing-circle {
@@ -1960,28 +2112,34 @@ body.accessibility-page {
 
 .dashboard-page .env-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
 }
 
 .dashboard-page .env-card {
-    padding: 14px;
-    border-radius: 18px;
+    padding: 12px;
+    border-radius: 16px;
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(214, 228, 239, 0.9);
     box-shadow: 0 10px 18px rgba(17, 39, 59, 0.05);
 }
 
 .dashboard-page .env-visual {
-    height: 96px;
-    border-radius: 16px;
-    margin-bottom: 12px;
+    height: 78px;
+    border-radius: 14px;
+    margin-bottom: 10px;
     background: linear-gradient(135deg, #aee5cc, #b5dbff, #d9c4ff);
 }
 
 .dashboard-page .env-card p {
     margin: 0;
     color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.dashboard-page .env-card h4 {
+    margin: 8px 0 4px;
+    font-size: 1.02rem;
 }
 
 .dashboard-page .env-card.ocean .env-visual {
@@ -1998,6 +2156,48 @@ body.accessibility-page {
 
 .dashboard-page .env-card.garden .env-visual {
     background: linear-gradient(135deg, #dff3c8, #bceac8, #cde7ff);
+}
+
+.dashboard-page .env-card.candy .env-visual,
+.new-session-page .environment-card.candy .env-visual {
+    background: linear-gradient(135deg, #ffd7f0, #ffc4a6, #c7ddff);
+}
+
+.dashboard-page .env-card.toyroom .env-visual,
+.new-session-page .environment-card.toyroom .env-visual {
+    background: linear-gradient(135deg, #ffe2b8, #ffd1d1, #cde7ff);
+}
+
+.dashboard-page .env-card.rainbow .env-visual,
+.new-session-page .environment-card.rainbow .env-visual {
+    background: linear-gradient(135deg, #ffb6c1, #ffd67a, #9fe1d1, #adc6ff);
+}
+
+.dashboard-page .env-card.cloudcastle .env-visual,
+.new-session-page .environment-card.cloudcastle .env-visual {
+    background: linear-gradient(135deg, #cfe3ff, #e0d2ff, #f7f6ff);
+}
+
+.dashboard-page .env-panel {
+    overflow: hidden;
+}
+
+@media (max-width: 1180px) {
+    .dashboard-page .env-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 860px) {
+    .dashboard-page .env-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-page .env-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .new-session-page .session-main {

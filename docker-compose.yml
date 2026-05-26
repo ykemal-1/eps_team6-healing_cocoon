@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: healingcocoon-backend:latest
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WORKERS=2
+      # Add Clerk and other secrets via an .env file or Docker Desktop environment settings
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "5500:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+
+  k6:
+    image: grafana/k6:latest
+    entrypoint: ["/bin/sh", "-c"]
+    tty: true
+    volumes:
+      - ./load-tests:/load-tests:ro
+
+# Usage:
+# - `docker-compose up -d --build` to start backend and frontend
+# - run k6 interactively: `docker-compose run --rm k6 k6 run /load-tests/load-test.js`

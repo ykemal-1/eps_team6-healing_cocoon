@@ -44,6 +44,15 @@ async def verify_staff_request(request: Request) -> dict[str, Any]:
     - HTTP 401 when token is missing or invalid.
     """
     if not settings.CLERK_SECRET_KEY:
+        # Local PoC convenience: allow a fixed demo token when no Clerk secret is provided.
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header and auth_header.strip() == "Bearer demo_token":
+            logger.warning(
+                "[verify_staff_request] No CLERK_SECRET_KEY set — accepting demo_token for PoC"
+            )
+            # Return a minimal mocked payload that downstream code may expect
+            return {"sub": "demo-staff", "email": "demo@local"}
+
         logger.error("[verify_staff_request] CLERK_SECRET_KEY is not set!")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

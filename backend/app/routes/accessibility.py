@@ -3,14 +3,14 @@ Accessibility settings routes.
 """
 
 from fastapi import APIRouter, Depends
-from app.core.auth import verify_staff_request
+from app.core.auth import get_demo_staff_user
 
 router = APIRouter(prefix="/api/accessibility", tags=["accessibility"])
 
 
 @router.get("")
 async def get_accessibility_settings(
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
 ):
     """
     Get accessibility settings.
@@ -29,7 +29,7 @@ async def get_accessibility_settings(
 
 @router.post("")
 async def update_accessibility_settings(
-    settings: dict, current_user: dict = Depends(verify_staff_request)
+    settings: dict, current_user: dict = Depends(get_demo_staff_user)
 ):
     """
     Update accessibility settings.

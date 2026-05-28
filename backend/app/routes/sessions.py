@@ -5,7 +5,7 @@ Session management routes.
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session as DBSession
 from app.db.database import get_db
-from app.core.auth import verify_staff_request
+from app.core.auth import get_demo_staff_user
 from app.schemas.session import SessionCreate, SessionUpdate, SessionResponse
 from app.services.session_service import (
     create_session,
@@ -21,7 +21,7 @@ router = APIRouter(prefix="/api/sessions", tags=["sessions"])
 @router.post("", response_model=SessionResponse)
 async def create_new_session(
     session_data: SessionCreate,
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
     db: DBSession = Depends(get_db),
 ):
     """
@@ -41,7 +41,7 @@ async def create_new_session(
 async def list_all_sessions(
     skip: int = 0,
     limit: int = 100,
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
     db: DBSession = Depends(get_db),
 ):
     """
@@ -63,7 +63,7 @@ async def list_all_sessions(
 @router.get("/{session_id}", response_model=SessionResponse)
 async def get_session_by_id(
     session_id: int,
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
     db: DBSession = Depends(get_db),
 ):
     """
@@ -82,7 +82,7 @@ async def get_session_by_id(
 async def update_session_by_id(
     session_id: int,
     session_data: SessionUpdate,
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
     db: DBSession = Depends(get_db),
 ):
     """
@@ -100,7 +100,7 @@ async def update_session_by_id(
 @router.delete("/{session_id}")
 async def delete_session_by_id(
     session_id: int,
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
     db: DBSession = Depends(get_db),
 ):
     """

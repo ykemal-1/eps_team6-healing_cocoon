@@ -5,7 +5,7 @@ Practice settings management routes.
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session as DBSession
 from app.db.database import get_db
-from app.core.auth import verify_staff_request
+from app.core.auth import get_demo_staff_user
 from app.schemas.settings import SettingsUpdate, SettingsResponse
 from app.services.settings_service import get_or_create_settings, update_settings
 
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/settings", tags=["settings"])
 
 @router.get("", response_model=SettingsResponse)
 async def get_settings(
-    current_user: dict = Depends(verify_staff_request), db: DBSession = Depends(get_db)
+    current_user: dict = Depends(get_demo_staff_user), db: DBSession = Depends(get_db)
 ):
     """
     Get current practice settings.
@@ -29,7 +29,7 @@ async def get_settings(
 @router.post("", response_model=SettingsResponse)
 async def update_practice_settings(
     settings_data: SettingsUpdate,
-    current_user: dict = Depends(verify_staff_request),
+    current_user: dict = Depends(get_demo_staff_user),
     db: DBSession = Depends(get_db),
 ):
     """

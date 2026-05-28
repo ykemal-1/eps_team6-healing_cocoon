@@ -115,3 +115,13 @@ async def verify_staff_request(request: Request) -> dict[str, Any]:
 
 # Backward-compatible alias used by existing routes.
 get_current_user = verify_staff_request
+
+
+def get_demo_staff_user() -> dict[str, str]:
+    """Return a stable demo staff user payload for public demo routes."""
+    return {
+        "sub": "demo-staff",
+        "user_id": "demo-staff",
+        "email": "demo@local",
+        "name": "Demo Staff",
+    }

@@ -3,17 +3,17 @@ Authentication routes.
 """
 
 from fastapi import APIRouter, Depends
-from app.core.auth import verify_staff_request
+from app.core.auth import get_demo_staff_user
 
 router = APIRouter(prefix="/api", tags=["auth"])
 
 
 @router.get("/me")
-async def get_current_user_info(user: dict = Depends(verify_staff_request)):
+async def get_current_user_info(user: dict = Depends(get_demo_staff_user)):
     """
-    Protected route for authenticated staff users.
+    Demo route that returns a stable staff identity.
 
-    Returns the Clerk-authenticated payload so the frontend can identify
-    the signed-in staff member.
+    Returns a demo payload so the frontend can identify the staff member
+    even when Clerk auth is not configured.
     """
-    return {"message": "Authenticated", "user": user}
+    return {"message": "Demo authenticated", "user": user}

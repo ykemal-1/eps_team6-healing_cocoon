@@ -34,18 +34,38 @@
 
         <main class="child-layout">
             <section class="child-hero card-panel">
-                <p class="child-greeting" id="childGreeting">Hi there 👋</p>
-                <h2>Choose a world where you want to relax</h2>
-                <p class="child-subtitle">
-                    Soft sounds, gentle lights, and cozy moments.
-                </p>
+                <div class="child-hero-copy">
+                    <p class="child-greeting" id="childGreeting">Hi there 👋</p>
+                    <h2>Pick a calm place</h2>
+                    <p class="child-subtitle">
+                        Big buttons. Easy words. One step at a time.
+                    </p>
+                </div>
+
+                <div class="child-steps" aria-label="How it works">
+                    <div class="child-step">
+                        <span aria-hidden="true">1</span>
+                        <strong>Choose a world</strong>
+                        <p>Tap one big card.</p>
+                    </div>
+                    <div class="child-step">
+                        <span aria-hidden="true">2</span>
+                        <strong>Set sound and scent</strong>
+                        <p>Pick soft or strong.</p>
+                    </div>
+                    <div class="child-step">
+                        <span aria-hidden="true">3</span>
+                        <strong>Start your session</strong>
+                        <p>Press the big button.</p>
+                    </div>
+                </div>
             </section>
 
             <section class="child-worlds card-panel">
                 <div class="section-heading compact">
                     <div>
-                        <p class="section-kicker">Pick a world</p>
-                        <h3>Choose one calming place</h3>
+                        <p class="section-kicker">Worlds</p>
+                        <h3>Tap one world</h3>
                     </div>
                 </div>
 
@@ -188,7 +208,7 @@
                     <div class="section-heading compact">
                         <div>
                             <p class="section-kicker">Sound</p>
-                            <h3>How soft should the sound be?</h3>
+                            <h3>Make it soft, medium, or strong</h3>
                         </div>
                     </div>
                     <div class="big-toggle-row">
@@ -223,7 +243,7 @@
                     <div class="section-heading compact">
                         <div>
                             <p class="section-kicker">Scent</p>
-                            <h3>How gentle should the scent be?</h3>
+                            <h3>Choose a little or a lot</h3>
                         </div>
                     </div>
                     <div class="big-toggle-row">
@@ -258,11 +278,9 @@
             <section class="breathing-card card-panel">
                 <div class="breathing-copy">
                     <p class="section-kicker">Need help relaxing?</p>
-                    <h3 id="breathingTitle">
-                        Take a deep breath in... and out...
-                    </h3>
+                    <h3 id="breathingTitle">Breathe with me</h3>
                     <p id="breathingInstruction">
-                        Follow the gentle pulse and breathe slowly.
+                        Press Begin and follow the moving line.
                     </p>
                     <div style="margin-top: 10px">
                         <button
@@ -288,7 +306,7 @@
                     class="primary-btn child-start-btn"
                     id="startCalmSession"
                 >
-                    Start My Calm Session
+                    Start Session
                 </button>
                 <p
                     class="status-message"
